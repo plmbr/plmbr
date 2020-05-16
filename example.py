@@ -4,6 +4,8 @@ from plmbr.pipe import Pipe
 
 if __name__ == '__main__':
     point = Tuple[int, int]
+    double_x: Pipe[Dict, Dict] = to(lambda p: {'x': p['x'] * 2, 'y': p['y']})
+    double_y: Pipe[Dict, Dict] = to(lambda p: {'x': p['x'], 'y': p['y'] * 2})
 
     (
         zip(range(5), range(5))
@@ -12,9 +14,6 @@ if __name__ == '__main__':
         - json_dumps()
         > save('points.json')
     )
-
-    double_x: Pipe[Dict, Dict] = to(lambda p: {'x': p['x'] * 2, 'y': p['y']})
-    double_y: Pipe[Dict, Dict] = to(lambda p: {'x': p['x'], 'y': p['y'] * 2})
 
     (
         open('points.json')
