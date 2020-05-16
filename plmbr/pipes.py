@@ -1,5 +1,5 @@
 from plmbr.pipe import Pipe, I, O
-from typing import Any, Callable, Dict, Iterator, List
+from typing import Callable, Dict, Iterator, List
 import json
 from itertools import islice
 from tqdm import tqdm
@@ -14,13 +14,13 @@ class same(Pipe[I, I]):
         return it
 
 
-class json_loads(Pipe[str, Any]):
-    def pipe(self, items: Iterator[str]) -> Iterator[Any]:
+class json_loads(Pipe[str, Dict]):
+    def pipe(self, items: Iterator[str]) -> Iterator[Dict]:
         return (json.loads(item) for item in items)
 
 
-class json_dumps(Pipe[Any, str]):
-    def pipe(self, items: Iterator[Any]) -> Iterator[str]:
+class json_dumps(Pipe[Dict, str]):
+    def pipe(self, items: Iterator[Dict]) -> Iterator[str]:
         return (json.dumps(item) for item in items)
 
 
@@ -41,11 +41,11 @@ class progress(Pipe[I, I]):
     def __init__(self, **kwargs):
         self.kwargs = kwargs
 
-    def pipe(self, it: Iterator[Any]) -> Iterator[Any]:
+    def pipe(self, it: Iterator[I]) -> Iterator[I]:
         return iter(tqdm(it, **self.kwargs))
 
 
-class transform(Pipe[I, O]):
+class to(Pipe[I, O]):
     def __init__(self, f: Callable[[I], O]):
         self.f = f
 
@@ -62,11 +62,11 @@ class keep(Pipe[I, I]):
         return filter(self.filter, it)
 
 
-class drop_fields(Pipe[Dict[str, Any], Dict[str, Any]]):
+class drop_fields(Pipe[Dict, Dict]):
     def __init__(self, *fields: str):
         self.fields = fields
 
-    def pipe(self, items: Iterator[Dict[str, Any]]) -> Iterator[Dict[str, Any]]:
+    def pipe(self, items: Iterator[Dict]) -> Iterator[Dict]:
         for item in items:
             for field in self.fields:
                 del item[field]
@@ -74,12 +74,12 @@ class drop_fields(Pipe[Dict[str, Any], Dict[str, Any]]):
             yield item
 
 
-class uniq(Pipe[Dict[str, Any], Dict[str, Any]]):
+class uniq(Pipe[Dict, Dict]):
     def __init__(self, *fields: str):
         self.fields = fields
         self.set: set = set()
 
-    def pipe(self, items: Iterator[Dict[str, Any]]) -> Iterator[Dict[str, Any]]:
+    def pipe(self, items: Iterator[Dict]) -> Iterator[Dict]:
         for item in items:
             i = frozenset({field: item[field] for field in self.fields}.items())
             if i in self.set:

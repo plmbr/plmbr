@@ -6,14 +6,14 @@ def test_branch(): (
     (i for i in range(3))
     - same()
     + [
-        transform(lambda a: a + 1)
+        to(lambda a: a + 1)
         - validate(iter([
             lambda i: check(i == 1),
             lambda i: check(i == 2),
             lambda i: check(i == 3),
         ])),
 
-        transform(lambda a: a + 2)
+        to(lambda a: a + 2)
         - validate(iter([
             lambda i: check(i == 2),
             lambda i: check(i == 3),

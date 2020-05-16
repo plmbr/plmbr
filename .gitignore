@@ -8,3 +8,5 @@ build/
 .doit.db
 
 .vscode/
+
+points.json
