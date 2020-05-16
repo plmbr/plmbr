@@ -12,10 +12,8 @@ setuptools.setup(
     description="Reuseable Pipes",
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url="https://github.com/plmbr/plmbr",
+    url="https://plmbr.github.io/plmbr/",
     packages=setuptools.find_packages(),
     python_requires='>=3.6',
-    install_requires=[
-        'tqdm'
-    ]
+    install_requires=['tqdm']
 )
