@@ -12,7 +12,7 @@ setuptools.setup(
     description="Reuseable Pipes",
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url="git@github.com:plmbr/plmbr.git",
+    url="https://github.com/plmbr/plmbr",
     packages=setuptools.find_packages(),
     python_requires='>=3.6',
     install_requires=[
