@@ -1,4 +1,4 @@
-"""plmbr by Gilad Kutiel"""
+""" Essential building blocks for a plmbr. """
 from abc import ABC, abstractmethod
 from typing import Iterable, Iterator, Generic, TypeVar, List, Union, Sequence
 from itertools import tee, chain
@@ -37,7 +37,9 @@ class _Tap(Generic[I]):
 
 
 class Pipe(ABC, Generic[I, O]):
-
+    """ 
+    A base class for all pipes.
+    """
     @abstractmethod
     def pipe(self, items: Iterator[I]) -> Iterator[O]: ...
 

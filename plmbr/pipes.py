@@ -1,3 +1,6 @@
+"""
+A collection of reusable pipes.
+"""
 from plmbr.pipe import Pipe, I, O
 from typing import Callable, Dict, Iterator, List
 import json
@@ -7,7 +10,7 @@ from tqdm import tqdm
 
 class same(Pipe[I, I]):
     """
-    A same pipe
+    Pass through pipe.
     """
 
     def pipe(self, it: Iterator[I]) -> Iterator[I]:

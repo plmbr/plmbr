@@ -2,7 +2,7 @@ from pathlib import Path
 from plmbr.version import version
 
 pys = list(Path('.').rglob('*.py'))
-rsts = list(Path('.').rglob('*.rst'))
+mds = list(Path('.').rglob('*.md'))
 sdist = Path('dist') / f'plmbr-{version}.tar.gz'
 
 
@@ -14,18 +14,15 @@ def task_test():
 
 
 def task_docs():
-    exts = [
-        'autodoc',
-        # 'doctest',
-        # 'todo',
-        # 'viewcode',
-    ]
-
     return {
-        'actions': ['make html'],
+        'actions': [
+            'rm -rf docs',
+            'pdoc --html -f -o pdoc --config show_source_code=False plmbr',
+            'mv pdoc/plmbr docs'
+        ],
         'targets': [],
-        'file_dep': pys + rsts,
-        # 'task_dep': ['test'],
+        'file_dep': pys + mds,
+        'task_dep': ['test'],
         'verbosity': 2,
     }
 

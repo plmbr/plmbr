@@ -1,11 +1,9 @@
-from typing import NewType, Tuple
+from typing import Tuple
 from plmbr.pipes import *
 from plmbr.pipe import Pipe
 
 if __name__ == '__main__':
     point = Tuple[int, int]
-    double_x: Pipe[Dict, Dict] = to(lambda p: {'x': p['x'] * 2, 'y': p['y']})
-    double_y: Pipe[Dict, Dict] = to(lambda p: {'x': p['x'], 'y': p['y'] * 2})
 
     (
         zip(range(5), range(5))
@@ -19,8 +17,9 @@ if __name__ == '__main__':
         open('points.json')
         - json_loads()
         + [
-            double_x,
-            double_y,
+            same[Dict](),
+            to(lambda p: {'x': p['x'] * 2, 'y': p['y']}),
+            to(lambda p: {'x': p['x'] * 2, 'y': p['y']}),
         ]
         > log()
     )
