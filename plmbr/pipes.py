@@ -6,6 +6,7 @@ from typing import Callable, Dict, Iterator, List
 import json
 from itertools import islice
 from tqdm import tqdm
+import random
 
 
 class same(Pipe[I, I]):
@@ -90,6 +91,29 @@ class uniq(Pipe[Dict, Dict]):
 
             self.set.add(i)
             yield item
+
+
+class sample(Pipe[Dict, Dict]):
+    def __init__(self, field, prob):
+        self.field = field
+        self.prob = prob
+        self.include = set()
+        self.exclude = set()
+
+    def pipe(self, items: Iterator[Dict]) -> Iterator[Dict]:
+        for item in items:
+            val = item[self.field]
+
+            if val in self.exclude:
+                continue
+
+            if random.uniform(0, 1) < self.prob:
+                self.include.add(val)
+            else:
+                self.exclude.add(val)
+
+            if val in self.include:
+                yield item
 
 
 class log(Pipe[I, I]):
