@@ -6,7 +6,7 @@ from typing import Callable, Dict, Iterator, List
 import json
 from itertools import islice
 from tqdm import tqdm
-import random
+from random import uniform
 
 
 class same(Pipe[I, I]):
@@ -107,10 +107,9 @@ class sample(Pipe[Dict, Dict]):
             if val in self.exclude:
                 continue
 
-            if random.uniform(0, 1) < self.prob:
-                self.include.add(val)
-            else:
-                self.exclude.add(val)
+            if not val in self.include:
+                s = self.include if uniform(0, 1) < self.prob else self.exclude
+                s.add(val)
 
             if val in self.include:
                 yield item
