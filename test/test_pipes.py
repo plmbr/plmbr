@@ -2,28 +2,6 @@ from plmbr.pipes import *
 from test.tests import check, validate
 
 
-def test_branch(): (
-    (i for i in range(3))
-    - same()
-    + [
-        to(lambda a: a + 1)
-        - validate(iter([
-            lambda i: check(i == 1),
-            lambda i: check(i == 2),
-            lambda i: check(i == 3),
-        ])),
-
-        to(lambda a: a + 2)
-        - validate(iter([
-            lambda i: check(i == 2),
-            lambda i: check(i == 3),
-            lambda i: check(i == 4),
-        ]))
-    ]
-    > same()
-)
-
-
 def test_keep(): (
     (i for i in range(3))
     - keep(lambda i: i > 0)

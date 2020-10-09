@@ -10,13 +10,8 @@ from tqdm import tqdm
 from random import uniform
 
 
-class same(Pipe[I, I]):
-    """
-    Pass through pipe.
-    """
-
-    def pipe(self, it: Iterator[I]) -> Iterator[I]:
-        return it
+def null(it: Iterator[I]) -> Iterator[I]:
+    return it
 
 
 class json_loads(Pipe[str, Dict]):
