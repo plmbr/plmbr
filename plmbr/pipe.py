@@ -33,7 +33,12 @@ class _Tap(Generic[I]):
         return _Tap(_split(self, pipes))
 
     def __gt__(self, pipe: 'Pipe[I, O]'):
-        pipe.flush(self)
+        g = pipe(self)
+        try:
+            while True:
+                next(g)
+        except:
+            ...
 
 
 class Pipe(ABC, Generic[I, O]):
@@ -42,10 +47,6 @@ class Pipe(ABC, Generic[I, O]):
     """
     @abstractmethod
     def pipe(self, items: Iterator[I]) -> Iterator[O]: ...
-
-    def flush(self, items: Iterator[I]):
-        for i in self(items):
-            ...
 
     def __call__(self, items: Iterator[I]) -> Iterator[O]:
         return self.pipe(items)

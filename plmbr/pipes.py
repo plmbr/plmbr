@@ -1,8 +1,9 @@
 """
 A collection of reusable pipes.
 """
+from collections import deque
 from plmbr.pipe import Pipe, I, O
-from typing import Callable, Dict, Iterator, List
+from typing import Callable, Dict, Iterator, List, Tuple
 import json
 from itertools import islice
 from tqdm import tqdm
@@ -94,25 +95,26 @@ class uniq(Pipe[Dict, Dict]):
 
 
 class sample(Pipe[Dict, Dict]):
-    def __init__(self, field, prob):
-        self.field = field
+    def __init__(self, prob):
         self.prob = prob
-        self.include = set()
-        self.exclude = set()
 
     def pipe(self, items: Iterator[Dict]) -> Iterator[Dict]:
         for item in items:
-            val = item[self.field]
-
-            if val in self.exclude:
-                continue
-
-            if not val in self.include:
-                s = self.include if uniform(0, 1) < self.prob else self.exclude
-                s.add(val)
-
-            if val in self.include:
+            if uniform(0, 1) < self.prob:
                 yield item
+
+
+class window(Pipe):
+    def __init__(self, size):
+        self.size = size
+        self.window = deque([])
+
+    def pipe(self, it: Iterator[I]) -> Iterator[tuple]:
+        for e in it:
+            self.window.append(e)
+            if len(self.window) == self.size:
+                yield tuple(self.window)
+                self.window.popleft()
 
 
 class log(Pipe[I, I]):
