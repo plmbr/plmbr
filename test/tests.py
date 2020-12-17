@@ -1,5 +1,5 @@
 from plmbr.pipe import Pipe, I
-from typing import Any, Iterator
+from typing import Any, Iterator, List
 import os
 from pathlib import Path
 from itertools import zip_longest
@@ -16,10 +16,17 @@ def check(exp, msg=''):
 
 
 class validate(Pipe[I, I]):
-    def __init__(self, validator: Iterator):
-        self.validator = validator
+    def __init__(self, *valids):
+        self.valids = valids
 
     def pipe(self, items: Iterator[I]) -> Iterator[I]:
-        for item, valid in zip_longest(items, self.validator):
+        res = list(items)
+        if len(res) < len(self.valids):
+            raise Exception(
+                f'Expecting at least {len(self.valids)} items got {res}'
+            )
+
+        for valid, item in zip(self.valids, res):
             valid(item)
-            yield item
+
+        return items

@@ -8,6 +8,7 @@ import json
 from itertools import islice
 from tqdm import tqdm
 from random import uniform
+import itertools
 
 
 def null(it: Iterator[I]) -> Iterator[I]:
@@ -128,3 +129,23 @@ class save(Pipe[I, I]):
             for item in items:
                 print(item, file=f)
                 yield item
+
+
+class tee(Pipe[I, I]):
+    def __init__(self, *pipes) -> None:
+        self.pipes = pipes
+
+    def pipe(self, items: Iterator[I]) -> Iterator[I]:
+        its = deque(
+            pipe.pipe(items)
+            for items, pipe
+            in zip(itertools.tee(items, len(self.pipes)), self.pipes)
+        )
+
+        while its:
+            try:
+                it = its.popleft()
+                yield next(it)
+                its.append(it)
+            except:
+                ...

@@ -8,14 +8,6 @@ O = TypeVar('O')
 T = TypeVar('T')
 
 
-def _split(items: Iterator[I], pipes: 'List[Pipe[I, O]]') -> Iterator[O]:
-    return chain.from_iterable(
-        pipe.pipe(items)
-        for items, pipe
-        in zip(tee(items, len(pipes)), pipes)
-    )
-
-
 class _Tap(Generic[I]):
     def __init__(self, items: Iterator[I]):
         self.items = items
@@ -29,16 +21,13 @@ class _Tap(Generic[I]):
     def __sub__(self, pipe: 'Pipe[I, O]') -> '_Tap[O]':
         return _Tap(pipe(self))
 
-    def __add__(self, pipes: 'List[Pipe[I, O]]') -> '_Tap[O]':
-        return _Tap(_split(self, pipes))
-
     def __gt__(self, pipe: 'Pipe[I, O]'):
         g = pipe(self)
         try:
             while True:
                 next(g)
-        except:
-            ...
+        except Exception as e:
+            print(e)
 
 
 class Pipe(ABC, Generic[I, O]):
@@ -57,9 +46,6 @@ class Pipe(ABC, Generic[I, O]):
     def __sub__(self, pipe: 'Pipe[O, T]') -> 'Pipe[I, T]':
         return _PipePipe(self, pipe)
 
-    def __add__(self, pipes: 'List[Pipe[O, T]]') -> 'Pipe[I, T]':
-        return _PipePipes(self, pipes)
-
 
 class _PipePipe(Pipe[I, T]):
     def __init__(self, p: Pipe[I, O], q: Pipe[O, T]):
@@ -68,12 +54,3 @@ class _PipePipe(Pipe[I, T]):
 
     def pipe(self, items: Iterator[I]) -> Iterator[T]:
         return self.q(self.p(items))
-
-
-class _PipePipes(Pipe[I, T]):
-    def __init__(self, p: Pipe[I, O], ps: List[Pipe[O, T]]):
-        self.p = p
-        self.ps = ps
-
-    def pipe(self, items: Iterator[I]) -> Iterator[T]:
-        return _split(self.p(items), self.ps)
