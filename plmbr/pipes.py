@@ -10,8 +10,9 @@ from tqdm import tqdm
 from random import uniform
 
 
-def null(it: Iterator[I]) -> Iterator[I]:
-    return it
+def null(it: Iterator[I]) -> None:
+    for item in it:
+        ...
 
 
 class json_loads(Pipe[str, Dict]):
