@@ -128,3 +128,16 @@ class save(Pipe[I, I]):
             for item in items:
                 print(item, file=f)
                 yield item
+
+
+class save_if(Pipe[I, I]):
+    def __init__(self, condition, file) -> None:
+        self.condition = condition
+        self.file = file
+
+    def pipe(self, items: Iterator[I]):
+        with open(self.file, 'w') as f:
+            for item in items:
+                if self.condition(item):
+                    print(item, file=f)
+                yield item
