@@ -8,6 +8,14 @@ O = TypeVar('O')
 T = TypeVar('T')
 
 
+def _split(items: Iterator[I], pipes: 'List[Pipe[I, O]]') -> Iterator[O]:
+    return chain.from_iterable(
+        pipe.pipe(items)
+        for items, pipe
+        in zip(tee(items, len(pipes)), pipes)
+    )
+
+
 class _Tap(Generic[I]):
     def __init__(self, items: Iterator[I]):
         self.items = items
@@ -20,6 +28,9 @@ class _Tap(Generic[I]):
 
     def __sub__(self, pipe: 'Pipe[I, O]') -> '_Tap[O]':
         return _Tap(pipe(self))
+
+    def __add__(self, pipes: 'List[Pipe[I, O]]') -> '_Tap[O]':
+        return _Tap(_split(self, pipes))
 
     def __gt__(self, pipe: 'Pipe[I, O]'):
         g = pipe(self)
