@@ -25,8 +25,8 @@ class _Tap(Generic[I]):
     def __gt__(self, pipe: 'Pipe[I, O]'):
         g = pipe(self)
         try:
-            while True:
-                next(g)
+            for _ in g:
+                pass
         except Exception as e:
             traceback.print_exc()
             print(e)
