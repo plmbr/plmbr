@@ -1,4 +1,5 @@
 """ Essential building blocks for a plmbr. """
+import traceback
 from abc import ABC, abstractmethod
 from typing import Iterable, Iterator, Generic, TypeVar, List, Union, Sequence
 from itertools import tee, chain
@@ -27,6 +28,7 @@ class _Tap(Generic[I]):
             while True:
                 next(g)
         except Exception as e:
+            traceback.print_exc()
             print(e)
 
 
