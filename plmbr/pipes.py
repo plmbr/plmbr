@@ -7,7 +7,7 @@ from typing import Callable, Dict, Iterator, List, Tuple
 import json
 from itertools import islice
 from tqdm import tqdm
-from random import uniform
+import random
 import itertools
 
 
@@ -95,8 +95,9 @@ class sample(Pipe[Dict, Dict]):
         self.prob = prob
 
     def pipe(self, items: Iterator[Dict]) -> Iterator[Dict]:
+        random.seed(2020)
         for item in items:
-            if uniform(0, 1) < self.prob:
+            if random.uniform(0, 1) < self.prob:
                 yield item
 
 
