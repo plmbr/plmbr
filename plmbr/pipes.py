@@ -91,11 +91,12 @@ class uniq(Pipe[Dict, Dict]):
 
 
 class sample(Pipe[Dict, Dict]):
-    def __init__(self, prob):
+    def __init__(self, prob, seed=2020):
         self.prob = prob
+        self.seed = seed
 
     def pipe(self, items: Iterator[Dict]) -> Iterator[Dict]:
-        random.seed(2020)
+        random.seed(self.seed)
         for item in items:
             if random.uniform(0, 1) < self.prob:
                 yield item
