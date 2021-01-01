@@ -3,7 +3,7 @@ A collection of reusable pipes.
 """
 from collections import deque
 from plmbr.pipe import Pipe, I, O
-from typing import Callable, Dict, Iterator, List, Tuple
+from typing import Any, Callable, Dict, Iterator, List, Tuple
 import json
 from itertools import islice
 from tqdm import tqdm
@@ -90,7 +90,7 @@ class uniq(Pipe[Dict, Dict]):
             yield item
 
 
-class sample(Pipe[Dict, Dict]):
+class sample(Pipe[Any, Any]):
     def __init__(self, prob, seed=2020):
         self.prob = prob
         self.seed = seed
@@ -100,6 +100,31 @@ class sample(Pipe[Dict, Dict]):
         for item in items:
             if random.uniform(0, 1) < self.prob:
                 yield item
+
+
+class sample_by(Pipe[Dict, Dict]):
+    def __init__(self, prob, key, seed=2020):
+        self.prob = prob
+        self.key = key
+        self.seed = seed
+
+    def pipe(self, items: Iterator[Dict]) -> Iterator[Dict]:
+        random.seed(self.seed)
+        good, bad = set(), set()
+        for item in items:
+            if item[self.key] in bad:
+                continue
+
+            if item[self.key] in good:
+                yield item
+                continue
+
+            if random.uniform(0, 1) < self.prob:
+                good.add(item)
+                yield item
+
+            else:
+                bad.add(item)
 
 
 class window(Pipe):
