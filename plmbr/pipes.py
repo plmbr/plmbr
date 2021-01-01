@@ -112,19 +112,20 @@ class sample_by(Pipe[Dict, Dict]):
         random.seed(self.seed)
         good, bad = set(), set()
         for item in items:
-            if item[self.key] in bad:
+            key = item[self.key]
+            if key in bad:
                 continue
 
-            if item[self.key] in good:
+            if key in good:
                 yield item
                 continue
 
             if random.uniform(0, 1) < self.prob:
-                good.add(item)
+                good.add(key)
                 yield item
 
             else:
-                bad.add(item)
+                bad.add(key)
 
 
 class window(Pipe):
