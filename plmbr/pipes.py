@@ -159,6 +159,16 @@ class save(Pipe[I, I]):
                 yield item
 
 
+class append(Pipe[I, I]):
+    def __init__(self, to) -> None:
+        self.to = to
+
+    def pipe(self, items: Iterator[I]):
+        for item in items:
+            self.to.append(item)
+            yield item
+
+
 class tee(Pipe[I, I]):
     def __init__(self, *pipes) -> None:
         self.pipes = pipes

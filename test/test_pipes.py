@@ -76,3 +76,13 @@ def test_tee():
             lambda i: check(i == 30),
         )
     )
+
+
+def test_append():
+    res = [8]
+    (
+        range(4)
+        - keep(lambda i: i > 1)
+        > append(res)
+    )
+    assert res == [8, 2, 3]
