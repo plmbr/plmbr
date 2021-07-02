@@ -11,8 +11,9 @@ import random
 import itertools
 
 
-def null(it: Iterator[I]) -> Iterator[I]:
-    return it
+class null(Pipe[I, I]):
+    def pipe(self, items: Iterator[I]) -> Iterator[I]:
+        return items
 
 
 class json_loads(Pipe[str, Dict]):
