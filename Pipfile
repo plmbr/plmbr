@@ -9,6 +9,7 @@ rope = "*"
 autopep8 = "*"
 twine = "*"
 pytest = "*"
+pytest-watch = "*"
 doit = "*"
 pdoc3 = "*"
 

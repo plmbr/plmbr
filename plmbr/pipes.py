@@ -1,9 +1,10 @@
 """
 A collection of reusable pipes.
 """
+import traceback
 from collections import deque
-from plmbr.pipe import Pipe, I, O
-from typing import Any, Callable, Dict, Iterator, List, Tuple
+from plmbr.pipe import Pipe
+from typing import Callable, Dict, Iterator
 import json
 from itertools import islice
 from tqdm import tqdm
@@ -11,60 +12,68 @@ import random
 import itertools
 
 
-class null(Pipe[I, I]):
-    def pipe(self, items: Iterator[I]) -> Iterator[I]:
+class null(Pipe):
+    def pipe(self, items: Iterator) -> Iterator:
         return items
 
 
-class json_loads(Pipe[str, Dict]):
-    def pipe(self, items: Iterator[str]) -> Iterator[Dict]:
+class json_loads(Pipe):
+    def pipe(self, items: Iterator) -> Iterator:
         return (json.loads(item) for item in items)
 
 
-class json_dumps(Pipe[Dict, str]):
-    def pipe(self, items: Iterator[Dict]) -> Iterator[str]:
+class json_dumps(Pipe):
+    def pipe(self, items: Iterator) -> Iterator:
         return (json.dumps(item) for item in items)
 
 
-class batch(Pipe[I, List[I]]):
+class batch(Pipe):
     def __init__(self, batch_size=64) -> None:
         self.batch_size = batch_size
 
-    def pipe(self, it: Iterator[I]) -> Iterator[List[I]]:
-        return iter(lambda: list(islice(it, self.batch_size)), [])
+    def pipe(self, it: Iterator) -> Iterator:
+        batch = []
+        for i in it:
+            batch.append(i)
+            if len(batch) == self.batch_size:
+                yield batch
+                batch = []
+
+        if batch:
+            yield batch
 
 
-class unbatch(Pipe[List[I], I]):
-    def pipe(self, lists: Iterator[List[I]]) -> Iterator[I]:
+class unbatch(Pipe):
+    def pipe(self, lists: Iterator) -> Iterator:
         return (item for l in lists for item in l)
 
 
-class progress(Pipe[I, I]):
+class progress(Pipe):
     def __init__(self, **kwargs):
         self.kwargs = kwargs
 
-    def pipe(self, it: Iterator[I]) -> Iterator[I]:
+    def pipe(self, it: Iterator) -> Iterator:
         return iter(tqdm(it, **self.kwargs))
 
 
-class to(Pipe[I, O]):
-    def __init__(self, f: Callable[[I], O]):
+class to(Pipe):
+    def __init__(self, f: Callable):
         self.f = f
 
-    def pipe(self, items: Iterator[I]) -> Iterator[O]:
+    def pipe(self, items: Iterator) -> Iterator:
         for item in items:
             yield self.f(item)
 
 
-class keep(Pipe[I, I]):
+class keep(Pipe):
     def __init__(self, filter):
         self.filter = filter
 
-    def pipe(self, it: Iterator[I]) -> Iterator[I]:
+    def pipe(self, it: Iterator) -> Iterator:
         return filter(self.filter, it)
 
 
-class drop_fields(Pipe[Dict, Dict]):
+class drop_fields(Pipe):
     def __init__(self, *fields: str):
         self.fields = fields
 
@@ -76,7 +85,7 @@ class drop_fields(Pipe[Dict, Dict]):
             yield item
 
 
-class uniq(Pipe[Dict, Dict]):
+class uniq(Pipe):
     def __init__(self, *fields: str):
         self.fields = fields
         self.set: set = set()
@@ -91,7 +100,7 @@ class uniq(Pipe[Dict, Dict]):
             yield item
 
 
-class sample(Pipe[Any, Any]):
+class sample(Pipe):
     def __init__(self, prob, seed=2020):
         self.prob = prob
         self.seed = seed
@@ -103,38 +112,12 @@ class sample(Pipe[Any, Any]):
                 yield item
 
 
-class sample_by(Pipe[Dict, Dict]):
-    def __init__(self, prob, key, seed=2020):
-        self.prob = prob
-        self.key = key
-        self.seed = seed
-
-    def pipe(self, items: Iterator[Dict]) -> Iterator[Dict]:
-        random.seed(self.seed)
-        good, bad = set(), set()
-        for item in items:
-            key = item[self.key]
-            if key in bad:
-                continue
-
-            if key in good:
-                yield item
-                continue
-
-            if random.uniform(0, 1) < self.prob:
-                good.add(key)
-                yield item
-
-            else:
-                bad.add(key)
-
-
 class window(Pipe):
     def __init__(self, size):
         self.size = size
         self.window = deque([])
 
-    def pipe(self, it: Iterator[I]) -> Iterator[tuple]:
+    def pipe(self, it: Iterator) -> Iterator[tuple]:
         for e in it:
             self.window.append(e)
             if len(self.window) == self.size:
@@ -142,49 +125,58 @@ class window(Pipe):
                 self.window.popleft()
 
 
-class log(Pipe[I, I]):
-    def pipe(self, items: Iterator[I]) -> Iterator[I]:
+class log(Pipe):
+    def pipe(self, items: Iterator) -> Iterator:
         for item in items:
             print(item)
             yield item
 
 
-class save(Pipe[I, I]):
+class save(Pipe):
     def __init__(self, file) -> None:
         self.file = file
 
-    def pipe(self, items: Iterator[I]):
+    def pipe(self, items: Iterator):
         with open(self.file, 'w') as f:
             for item in items:
                 print(item, file=f)
                 yield item
 
 
-class append(Pipe[I, I]):
+class append(Pipe):
     def __init__(self, to) -> None:
         self.to = to
 
-    def pipe(self, items: Iterator[I]):
+    def pipe(self, items: Iterator):
         for item in items:
             self.to.append(item)
             yield item
 
 
-class tee(Pipe[I, I]):
+class tee(Pipe):
     def __init__(self, *pipes) -> None:
         self.pipes = pipes
 
-    def pipe(self, items: Iterator[I]) -> Iterator[I]:
-        its = deque(
-            pipe.pipe(items)
-            for items, pipe
-            in zip(itertools.tee(items, len(self.pipes)), self.pipes)
-        )
+    def pipe(self, items: Iterator) -> Iterator:
+        for items in (
+                pipe(items)
+                for items, pipe
+                in zip(itertools.tee(items, len(self.pipes)), self.pipes)):
+            for item in items:
+                yield item
 
-        while its:
-            try:
-                it = its.popleft()
-                yield next(it)
-                its.append(it)
-            except:
-                ...
+
+class catch(Pipe):
+    def __init__(self, exception_handler=None):
+        self.exception_handler = exception_handler
+
+    def pipe(self, it: Iterator) -> Iterator:
+        try:
+            for i in it:
+                yield i
+        except Exception as e:
+            if self.exception_handler is None:
+                traceback.print_exc()
+                print(e)
+            else:
+                self.exception_handler(e)

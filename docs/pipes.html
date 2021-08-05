@@ -33,20 +33,18 @@
 <dl>
 <dt id="plmbr.pipes.append"><code class="flex name class">
 <span>class <span class="ident">append</span></span>
-<span>(</span><span>*args, **kwds)</span>
+<span>(</span><span>to)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
 </ul>
 <h3>Methods</h3>
 <dl>
 <dt id="plmbr.pipes.append.pipe"><code class="name flex">
-<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator[~I])</span>
+<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -55,20 +53,38 @@
 </dd>
 <dt id="plmbr.pipes.batch"><code class="flex name class">
 <span>class <span class="ident">batch</span></span>
-<span>(</span><span>*args, **kwds)</span>
+<span>(</span><span>batch_size=64)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
 </ul>
 <h3>Methods</h3>
 <dl>
 <dt id="plmbr.pipes.batch.pipe"><code class="name flex">
-<span>def <span class="ident">pipe</span></span>(<span>self, it: Iterator[~I]) -> Iterator[List[~I]]</span>
+<span>def <span class="ident">pipe</span></span>(<span>self, it: Iterator) -> Iterator</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="plmbr.pipes.catch"><code class="flex name class">
+<span>class <span class="ident">catch</span></span>
+<span>(</span><span>exception_handler=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="plmbr.pipes.catch.pipe"><code class="name flex">
+<span>def <span class="ident">pipe</span></span>(<span>self, it: Iterator) -> Iterator</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -77,15 +93,13 @@
 </dd>
 <dt id="plmbr.pipes.drop_fields"><code class="flex name class">
 <span>class <span class="ident">drop_fields</span></span>
-<span>(</span><span>*args, **kwds)</span>
+<span>(</span><span>*fields: str)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -99,20 +113,17 @@
 </dd>
 <dt id="plmbr.pipes.json_dumps"><code class="flex name class">
 <span>class <span class="ident">json_dumps</span></span>
-<span>(</span><span>*args, **kwds)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
 </ul>
 <h3>Methods</h3>
 <dl>
 <dt id="plmbr.pipes.json_dumps.pipe"><code class="name flex">
-<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator[Dict]) -> Iterator[str]</span>
+<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator) -> Iterator</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -121,20 +132,17 @@
 </dd>
 <dt id="plmbr.pipes.json_loads"><code class="flex name class">
 <span>class <span class="ident">json_loads</span></span>
-<span>(</span><span>*args, **kwds)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
 </ul>
 <h3>Methods</h3>
 <dl>
 <dt id="plmbr.pipes.json_loads.pipe"><code class="name flex">
-<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator[str]) -> Iterator[Dict]</span>
+<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator) -> Iterator</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -143,20 +151,18 @@
 </dd>
 <dt id="plmbr.pipes.keep"><code class="flex name class">
 <span>class <span class="ident">keep</span></span>
-<span>(</span><span>*args, **kwds)</span>
+<span>(</span><span>filter)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
 </ul>
 <h3>Methods</h3>
 <dl>
 <dt id="plmbr.pipes.keep.pipe"><code class="name flex">
-<span>def <span class="ident">pipe</span></span>(<span>self, it: Iterator[~I]) -> Iterator[~I]</span>
+<span>def <span class="ident">pipe</span></span>(<span>self, it: Iterator) -> Iterator</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -165,20 +171,17 @@
 </dd>
 <dt id="plmbr.pipes.log"><code class="flex name class">
 <span>class <span class="ident">log</span></span>
-<span>(</span><span>*args, **kwds)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
 </ul>
 <h3>Methods</h3>
 <dl>
 <dt id="plmbr.pipes.log.pipe"><code class="name flex">
-<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator[~I]) -> Iterator[~I]</span>
+<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator) -> Iterator</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -187,20 +190,17 @@
 </dd>
 <dt id="plmbr.pipes.null"><code class="flex name class">
 <span>class <span class="ident">null</span></span>
-<span>(</span><span>*args, **kwds)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
 </ul>
 <h3>Methods</h3>
 <dl>
 <dt id="plmbr.pipes.null.pipe"><code class="name flex">
-<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator[~I]) -> Iterator[~I]</span>
+<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator) -> Iterator</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -209,20 +209,18 @@
 </dd>
 <dt id="plmbr.pipes.progress"><code class="flex name class">
 <span>class <span class="ident">progress</span></span>
-<span>(</span><span>*args, **kwds)</span>
+<span>(</span><span>**kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
 </ul>
 <h3>Methods</h3>
 <dl>
 <dt id="plmbr.pipes.progress.pipe"><code class="name flex">
-<span>def <span class="ident">pipe</span></span>(<span>self, it: Iterator[~I]) -> Iterator[~I]</span>
+<span>def <span class="ident">pipe</span></span>(<span>self, it: Iterator) -> Iterator</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -231,15 +229,13 @@
 </dd>
 <dt id="plmbr.pipes.sample"><code class="flex name class">
 <span>class <span class="ident">sample</span></span>
-<span>(</span><span>*args, **kwds)</span>
+<span>(</span><span>prob, seed=2020)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -251,44 +247,20 @@
 </dd>
 </dl>
 </dd>
-<dt id="plmbr.pipes.sample_by"><code class="flex name class">
-<span>class <span class="ident">sample_by</span></span>
-<span>(</span><span>*args, **kwds)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
-</ul>
-<h3>Methods</h3>
-<dl>
-<dt id="plmbr.pipes.sample_by.pipe"><code class="name flex">
-<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator[Dict]) -> Iterator[Dict]</span>
+<dt id="plmbr.pipes.save"><code class="flex name class">
+<span>class <span class="ident">save</span></span>
+<span>(</span><span>file)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
-</dd>
-</dl>
-</dd>
-<dt id="plmbr.pipes.save"><code class="flex name class">
-<span>class <span class="ident">save</span></span>
-<span>(</span><span>*args, **kwds)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
 </ul>
 <h3>Methods</h3>
 <dl>
 <dt id="plmbr.pipes.save.pipe"><code class="name flex">
-<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator[~I])</span>
+<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -297,20 +269,18 @@
 </dd>
 <dt id="plmbr.pipes.tee"><code class="flex name class">
 <span>class <span class="ident">tee</span></span>
-<span>(</span><span>*args, **kwds)</span>
+<span>(</span><span>*pipes)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
 </ul>
 <h3>Methods</h3>
 <dl>
 <dt id="plmbr.pipes.tee.pipe"><code class="name flex">
-<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator[~I]) -> Iterator[~I]</span>
+<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator) -> Iterator</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -319,20 +289,18 @@
 </dd>
 <dt id="plmbr.pipes.to"><code class="flex name class">
 <span>class <span class="ident">to</span></span>
-<span>(</span><span>*args, **kwds)</span>
+<span>(</span><span>f: Callable)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
 </ul>
 <h3>Methods</h3>
 <dl>
 <dt id="plmbr.pipes.to.pipe"><code class="name flex">
-<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator[~I]) -> Iterator[~O]</span>
+<span>def <span class="ident">pipe</span></span>(<span>self, items: Iterator) -> Iterator</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -341,20 +309,17 @@
 </dd>
 <dt id="plmbr.pipes.unbatch"><code class="flex name class">
 <span>class <span class="ident">unbatch</span></span>
-<span>(</span><span>*args, **kwds)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
 </ul>
 <h3>Methods</h3>
 <dl>
 <dt id="plmbr.pipes.unbatch.pipe"><code class="name flex">
-<span>def <span class="ident">pipe</span></span>(<span>self, lists: Iterator[List[~I]]) -> Iterator[~I]</span>
+<span>def <span class="ident">pipe</span></span>(<span>self, lists: Iterator) -> Iterator</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -363,15 +328,13 @@
 </dd>
 <dt id="plmbr.pipes.uniq"><code class="flex name class">
 <span>class <span class="ident">uniq</span></span>
-<span>(</span><span>*args, **kwds)</span>
+<span>(</span><span>*fields: str)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -385,20 +348,18 @@
 </dd>
 <dt id="plmbr.pipes.window"><code class="flex name class">
 <span>class <span class="ident">window</span></span>
-<span>(</span><span>*args, **kwds)</span>
+<span>(</span><span>size)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A base class for all pipes.</p></div>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="plmbr.pipe.Pipe" href="pipe.html#plmbr.pipe.Pipe">Pipe</a></li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
 </ul>
 <h3>Methods</h3>
 <dl>
 <dt id="plmbr.pipes.window.pipe"><code class="name flex">
-<span>def <span class="ident">pipe</span></span>(<span>self, it: Iterator[~I]) -> Iterator[tuple]</span>
+<span>def <span class="ident">pipe</span></span>(<span>self, it: Iterator) -> Iterator[tuple]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -431,6 +392,12 @@
 <h4><code><a title="plmbr.pipes.batch" href="#plmbr.pipes.batch">batch</a></code></h4>
 <ul class="">
 <li><code><a title="plmbr.pipes.batch.pipe" href="#plmbr.pipes.batch.pipe">pipe</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="plmbr.pipes.catch" href="#plmbr.pipes.catch">catch</a></code></h4>
+<ul class="">
+<li><code><a title="plmbr.pipes.catch.pipe" href="#plmbr.pipes.catch.pipe">pipe</a></code></li>
 </ul>
 </li>
 <li>
@@ -479,12 +446,6 @@
 <h4><code><a title="plmbr.pipes.sample" href="#plmbr.pipes.sample">sample</a></code></h4>
 <ul class="">
 <li><code><a title="plmbr.pipes.sample.pipe" href="#plmbr.pipes.sample.pipe">pipe</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="plmbr.pipes.sample_by" href="#plmbr.pipes.sample_by">sample_by</a></code></h4>
-<ul class="">
-<li><code><a title="plmbr.pipes.sample_by.pipe" href="#plmbr.pipes.sample_by.pipe">pipe</a></code></li>
 </ul>
 </li>
 <li>
