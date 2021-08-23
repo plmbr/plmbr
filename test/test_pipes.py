@@ -103,7 +103,6 @@ def test_append():
     res = [8]
     (
         range(4)
-        - log()
         > append(res)
     )
     assert res == [8, 0, 1, 2, 3]
@@ -120,18 +119,33 @@ def test_tee(): (
 
 
 def test_catch():
-    def bad_func(items):
-        for i in items:
-            if i % 2:
-                raise Exception(i)
-            yield i
+    class bad_pipe(Pipe):
+        def pipe(self, items):
+            for i in items:
+                if i % 2:
+                    self.throw(i)
+                else:
+                    yield i
 
     err = []
+
+    (
+        range(5)
+        - bad_pipe()
+        - validate(0, 2, 4)
+        > catch(lambda i: err.append(i))
+    )
+
+    assert err == [1, 3]
+
+
+def test_lambda():
+    res = []
     (
         range(3)
-        - pipe(bad_func)
-        - validate(0, 2)
-        > catch(lambda e: err.append(e.args[0])))
+        - to(lambda x: x + 1)
+        - (lambda es: (e + 1 for e in es))
+        > (lambda es: [res.append(e) for e in es])
+    )
 
-    print(err)
-    assert err == [1]
+    assert res == [2, 3, 4]

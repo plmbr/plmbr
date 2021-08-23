@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.8.1" />
 <title>plmbr API documentation</title>
-<meta name="description" content="plmbr …" />
+<meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,44 +20,6 @@
 <h1 class="title">Package <code>plmbr</code></h1>
 </header>
 <section id="section-intro">
-<h1 id="plmbr">plmbr</h1>
-<p>Type safe, reusable pipes to process streams of data.</p>
-<pre><code class="python">from typing import Tuple
-from plmbr.pipes import *
-from plmbr.pipe import Pipe
-
-point = Tuple[int, int]
-double_x: Pipe[Dict, Dict] = to(lambda p: {'x': p['x'] * 2, 'y': p['y']})
-double_y: Pipe[Dict, Dict] = to(lambda p: {'x': p['x'], 'y': p['y'] * 2})
-
-
-if __name__ == '__main__':
-
-    (
-        zip(range(5), range(5))
-        - keep[point](lambda p: p[0] &gt;= 2)
-        - to[point, Dict](lambda p: {'x': p[0], 'y': p[1]})
-        - json_dumps()
-        &gt; save('points.json')
-    )
-
-    (
-        open('points.json')
-        - json_loads()
-        + [
-            double_x,
-            double_y,
-        ]
-        &gt; log()
-    )
-
-    # {'x': 4, 'y': 2}
-    # {'x': 6, 'y': 3}
-    # {'x': 8, 'y': 4}
-    # {'x': 2, 'y': 4}
-    # {'x': 3, 'y': 6}
-    # {'x': 4, 'y': 8}
-</code></pre>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
@@ -86,9 +48,7 @@ if __name__ == '__main__':
 <nav id="sidebar">
 <h1>Index</h1>
 <div class="toc">
-<ul>
-<li><a href="#plmbr">plmbr</a></li>
-</ul>
+<ul></ul>
 </div>
 <ul id="index">
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>

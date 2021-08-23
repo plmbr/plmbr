@@ -1,12 +1,10 @@
 """
 A collection of reusable pipes.
 """
-import traceback
 from collections import deque
 from plmbr.pipe import Pipe
 from typing import Callable, Dict, Iterator
 import json
-from itertools import islice
 from tqdm import tqdm
 import random
 import itertools
@@ -19,7 +17,11 @@ class null(Pipe):
 
 class json_loads(Pipe):
     def pipe(self, items: Iterator) -> Iterator:
-        return (json.loads(item) for item in items)
+        for item in items:
+            try:
+                yield json.loads(item)
+            except Exception as e:
+                self.throw(e)
 
 
 class json_dumps(Pipe):
@@ -62,15 +64,23 @@ class to(Pipe):
 
     def pipe(self, items: Iterator) -> Iterator:
         for item in items:
-            yield self.f(item)
+            try:
+                yield self.f(item)
+            except Exception as e:
+                self.throw(e)
 
 
 class keep(Pipe):
     def __init__(self, filter):
         self.filter = filter
 
-    def pipe(self, it: Iterator) -> Iterator:
-        return filter(self.filter, it)
+    def pipe(self, items: Iterator) -> Iterator:
+        for item in items:
+            try:
+                if self.filter(item):
+                    yield item
+            except Exception as e:
+                self.throw(e)
 
 
 class drop_fields(Pipe):
@@ -79,10 +89,13 @@ class drop_fields(Pipe):
 
     def pipe(self, items: Iterator[Dict]) -> Iterator[Dict]:
         for item in items:
-            for field in self.fields:
-                del item[field]
+            try:
+                for field in self.fields:
+                    del item[field]
 
-            yield item
+                yield item
+            except Exception as e:
+                self.throw(e)
 
 
 class uniq(Pipe):
@@ -167,16 +180,9 @@ class tee(Pipe):
 
 
 class catch(Pipe):
-    def __init__(self, exception_handler=None):
-        self.exception_handler = exception_handler
+    def __init__(self, catch=None):
+        print(catch)
+        self.catch = catch or (lambda e: print(e))
 
     def pipe(self, it: Iterator) -> Iterator:
-        try:
-            for i in it:
-                yield i
-        except Exception as e:
-            if self.exception_handler is None:
-                traceback.print_exc()
-                print(e)
-            else:
-                self.exception_handler(e)
+        return it
