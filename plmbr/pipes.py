@@ -8,6 +8,7 @@ import json
 from tqdm import tqdm
 import random
 import itertools
+import logging
 
 
 class null(Pipe):
@@ -181,8 +182,7 @@ class tee(Pipe):
 
 class catch(Pipe):
     def __init__(self, catch=None):
-        print(catch)
-        self.catch = catch or (lambda e: print(e))
+        self.catch = catch or (lambda e: logging.error(e))
 
     def pipe(self, it: Iterator) -> Iterator:
         return it
